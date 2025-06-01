@@ -64,7 +64,7 @@ def cisco_fetch_networkconf():
         name = parts[1]
         status = parts[2]
         ports = " ".join(parts[3:]) if len(parts) > 3 else ""
-        if vlan_id in {"1002", "1003", "1004", "1005"}:
+        if vlan_id in {"1", "1002", "1003", "1004", "1005"}:
             continue
         if vlan_id.isdigit():
             networks.append({
