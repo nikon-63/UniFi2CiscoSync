@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 import os
 import re
 
-
 # Loading environment variables from .env file
 # TODO: Change so that python-dotenv is not required for this script to run
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -45,11 +44,9 @@ def cisco_fetch_networkconf():
     output = connect_to_cisco_switch(command)
     if "Invalid input" in output:
         raise Exception("ERROR: Invalid command or insufficient permissions.")
-    
     networks = []
     lines = output.splitlines()
     parsing = False
-
     for line in lines[2:]:
         if re.match(r"^VLAN\s+Name\s+Status\s+Ports", line):
             parsing = True
@@ -76,7 +73,21 @@ def cisco_fetch_networkconf():
                 "status": status,
                 "ports": ports
             })
-    
     return {"data": networks}
 
-print(cisco_fetch_networkconf())
+def cisco_make_network(vlan_id, vlan_name):
+    command = (
+        "configure terminal\n"
+        f"vlan {vlan_id}\n"
+        f"name {vlan_name}\n"
+        "end"
+    )
+    output = connect_to_cisco_switch(command)
+
+def cisco_delete_network(vlan_id):
+    command = (
+        "configure terminal\n"
+        f"no vlan {vlan_id}\n"
+        "end"
+    )
+    output = connect_to_cisco_switch(command)
