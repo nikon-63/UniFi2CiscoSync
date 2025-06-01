@@ -42,8 +42,6 @@ def main():
     unifi_networks = unifi_connect()
     vlan_networks = sorted_networks(unifi_networks)
 
-    print(connect_to_cisco_switch("show version"))
-
 
 if __name__ == "__main__":
     main()
